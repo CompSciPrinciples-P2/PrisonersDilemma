@@ -1,5 +1,5 @@
+import random
 
-import random 
 ####
 # Each team's file must define four tokens:
 #     team_name: a string
@@ -9,8 +9,10 @@ import random
 ####
 
 team_name = 'Zygomatics' # Only 10 chars displayed.
+
 strategy_name = 'Adapt and Change'
 strategy_description = 'How does this strategy decide?'
+
 
     
 def move(my_history, their_history, my_score, their_score):
@@ -20,41 +22,27 @@ def move(my_history, their_history, my_score, their_score):
     Make my move.
     Returns 'c' or 'b'. 
     '''
-    my_history = []
-    their_history = []
-    Bscore = 2
-    Cscore = 1
-    percent = abs(Bscore/Cscore)*100
-    
-    if len (their_history) == 0:
-            return random.choice('cb')
+
+    percentc = 0
+    percentb = 0
+    if len(their_history) == 0:
+        return random.choice('cb')
     else:
-        
-            
-        if Bscore == Cscore:
-            return ('cb')
-            
-        for c in range(len(their_history)):
-            if 'c' in their_history[c]:
-                Cscore += 1
-            if len(their_history) > 5 and 'b' != their_history[(c-1)] and 'c' == their_history[(c-2)] and 'c' == their_history[(c-3)]:
-                Bscore += 5
-        for b in range(len(their_history)):
-            if 'b' in their_history[b]:
-                Bscore += 1
-            if len(their_history) > 5 and 'b' != their_history[(b-1)] and 'b' == their_history[(b-2)] and 'b' == their_history[(b-3)]:
-                Bscore += 5
-        roll = random.randrange(100)
-        if roll <= percent:
-            return 'c'
-            my_history.append('c')
-            
-        else:
-            return 'b'
-            my_history.append('b')
-       
-    
-            
+        for x in range(len(their_history)):
+            if 'c' == their_history[x]:
+                percentc += 1
+            if len(their_history) > 5 and 'b' != their_history[x]:
+                if 'c' == their_history[x] and 'c' == their_history[(x - 1)] and 'c' == their_history[(x - 2)] and 'c' == their_history[(x - 3)]:
+                    percentb += 5
+        for y in range(len(their_history)):
+            if 'b' == their_history[y]:
+                percentb += 1
+        if percentc < percentb:
+                        return 'b'
+        if percentb < percentc:
+                        return 'c'  
+          
+              
     # my_history: a string with one letter (c or b) per round that has been played with this opponent.
     # their_history: a string of the same length as history, possibly empty. 
     # The first round between these two players is my_history[0] and their_history[0].
@@ -63,9 +51,10 @@ def move(my_history, their_history, my_score, their_score):
     # Analyze my_history and their_history and/or my_score and their_score.
     # Decide whether to return 'c' or 'b'.
     
-    return 'c'
+ 
 
     
+
 def test_move(my_history, their_history, my_score, their_score, result):
     '''calls move(my_history, their_history, my_score, their_score)
     from this module. Prints error if return value != result.
